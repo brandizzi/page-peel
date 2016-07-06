@@ -18,10 +18,5 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Inelegant.  If not, see <http://www.gnu.org/licenses/>.
 
-from inelegant.finder import TestFinder
 
-load_tests = TestFinder(
-    'page_peel.store',
-    'page_peel.store.fake',
-    'page_peel_tests.store'
-).load_tests
+from fake import FakeStore
