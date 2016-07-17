@@ -23,5 +23,6 @@ from inelegant.finder import TestFinder
 load_tests = TestFinder(
     'page_peel.store',
     'page_peel.store.fake',
+    'page_peel.store.file',
     'page_peel_tests.store'
 ).load_tests

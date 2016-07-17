@@ -20,9 +20,14 @@
 
 import unittest
 
+import os
+import os.path
+import shutil
+import tempfile
 import textwrap
+import urlparse
 
-from page_peel.store import FakeStore
+from page_peel.store import FakeStore, FileStore
 
 
 class TestStore(unittest.TestCase):
@@ -66,3 +71,23 @@ class TestStore(unittest.TestCase):
         content = store.read('http://localhost:9000/index.html')
 
         self.assertEquals(content, "New message")
+
+
+class TestFileStore(TestStore):
+
+    def setUp(self):
+        self._directory = tempfile.mkdtemp()
+
+    def tearDown(self):
+        shutil.rmtree(self._directory)
+
+    def get_store(self, uri, content):
+        url = urlparse.urlparse(uri)
+        path = os.path.join(self._directory, url.path[1:])
+
+        with open(path, 'w') as f:
+            f.write(content)
+
+        return FileStore(
+            directory=self._directory,
+            base_address=url.scheme + '://' + url.netloc)
