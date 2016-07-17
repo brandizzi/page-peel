@@ -18,6 +18,25 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Inelegant.  If not, see <http://www.gnu.org/licenses/>.
 
+import os.path
 
-from fake import FakeStore
-from file import FileStore
+
+class FileStore(object):
+
+    def __init__(self, base_address, directory):
+        self.base_address = base_address
+        self.directory = directory
+
+    def read(self, address):
+        path = os.path.join(
+            self.directory, address.replace(self.base_address, '')[1:])
+
+        with open(path) as f:
+            return f.read()
+
+    def write(self, address, content):
+        path = os.path.join(
+            self.directory, address.replace(self.base_address, '')[1:])
+
+        with open(path, 'w') as f:
+            return f.write(content)
