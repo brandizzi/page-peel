@@ -20,7 +20,8 @@
 
 import os.path
 
-
+print __name__
+print __module__
 class FileStore(object):
     """
     ``FileStore`` is a store class that deals with files from a directory.
