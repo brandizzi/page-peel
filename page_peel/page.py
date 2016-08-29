@@ -8,8 +8,8 @@ import confeitaria.interfaces
 
 class ServingPage(confeitaria.interfaces.Page):
 
-    def __init__(self, root_dir):
-        self.root_dir = root_dir
+    def __init__(self, store):
+        self.store = store
 
     def index(self):
         request = self.get_request()
@@ -18,12 +18,23 @@ class ServingPage(confeitaria.interfaces.Page):
         except TypeError:
             path = ''
 
+        return self.store.read(path)
+
+
+class Store(object):
+
+    def __init__(self, root_dir, package):
+        self.root_dir = root_dir
+        self.package = package
+
+    def read(self, path):
         try:
             content = get_content_from_fs(self.root_dir, path)
         except IOError:
-            content = get_content_from_package(__name__, path)
+            content = get_content_from_package(self.package, path)
 
         return content
+
 
 def get_content_from_fs(root_dir, path, default_file='index.html'):
     fs_path = os.path.join(root_dir, path)
@@ -46,6 +57,9 @@ def get_content_from_package(
 
     return content
 
+
 if __name__ == '__main__':
-    page = ServingPage(root_dir='/home/adam/sandbox')
+    store = Store(root_dir='/home/adam/sandbox', package=__name__)
+    page = ServingPage(store=store)
+
     confeitaria.server.Server(page).run()
