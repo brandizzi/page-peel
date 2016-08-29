@@ -1,2 +1,2 @@
 confeitaria
-html5lib
+lxml
